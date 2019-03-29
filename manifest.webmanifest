@@ -1,0 +1,29 @@
+{
+  "manifest_version": 1,
+  "version": "0.0.1",
+  "name": "Volt Xmas Calendar",
+  "short_name": "Volt Calendar",
+  "description": "One proposition from our Amsterdam Declaration for the European Elections every day until Christmas.",
+  "default_locale": "en",
+  "icons": [
+        {
+            "src": "img/volt_snow_icon_192x192.min.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "img/volt_snow_icon_256x256.min.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "img/volt_snow_icon_512x512.min.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#612095",
+  "theme_color": "#612095"
+}

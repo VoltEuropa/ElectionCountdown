@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" manifest="gadget_volt.appcache">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Volt Xmas Gadget</title>
+
+    <link rel="stylesheet" href="lib/material_design_lite.1.3.0.min.css" />
+    <link rel="stylesheet" href="gadget_volt.css" />
+
+    <script src="lib/material_design_lite.1.3.0.min.js"></script>
+
+    <script src="rsvp.latest.min.js"></script>
+    <script src="renderjs.latest.min.js"></script>
+    <script src="gadget_global.js"></script>
+    <script src="gadget_volt.js"></script>
+    
+    <script id="dialog_tab_header" type="text/x-supplant">
+      <a href="#{slug}" class="mdl-tabs__tab {active}">{id}</a>
+    </script>
+
+    <script id="dialog_ny_content" type="text/x-supplant">
+      <div class="mdl-tabs__panel {active}" id="{slug}">
+        <img src="{src}" class="volt-ny-banner" alt="nope" />
+      </div>
+    </script>
+
+    <script id="dialog_tab_content" type="text/x-supplant">
+      <div class="mdl-tabs__panel {active}" id="{slug}">
+        <h3 class="mdl-tabs__content-item volt-content-header">{title}</h3>
+        <h4 class="mdl-tabs__content-item volt-content-proposal" >{proposal}</h4>
+        <p class="mdl-tabs__content-item volt-content-text"><strong class="volt-text-intro" data-i18n="rationale">Rationale</strong>&nbsp;{why}</p>
+        <p class="mdl-tabs__content-item volt-content-text"><strong class="volt-text-intro" data-i18n="measures">Steps</strong>&nbsp;{how}</p>
+        <p class="mdl-tabs__content-item volt-content-text"><strong class="volt-text-intro" data-i18n="funding">Funding</strong>&nbsp;{funding}</p>
+      </div>
+    </script>
+    
+    <script id="dialog_template" type="text/x-supplant">
+      <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect volt-dialog-content-container">
+        <div class="mdl-tabs__tab-bar">{tab_list}</div>
+        <form name="volt-dialog-close" class="volt-dialog-action-form volt-dialog-close-form volt-dialog-close-top">
+          <button type="submit" class="mdl-button volt-dialog-close"><i class="material-icons">close</i></button>
+        </form>
+        {content_list}
+        <div class="mdl-dialog__actions volt-dialog-actions stale">
+          <form name="volt-dialog-prev" class="volt-dialog-action-form volt-dialog-prev-form">
+            <button type="submit" class="mdl-button volt-dialog-close"><i class="material-icons">chevron_left</i></button>
+          </form>
+          <form name="volt-dialog-close" class="volt-dialog-action-form volt-dialog-close-form">
+            <button type="submit" class="mdl-button volt-dialog-close"><i class="material-icons">close</i></button>
+          </form>
+          <form name="volt-dialog-next" class="volt-dialog-action-form volt-dialog-next-form">
+            <button type="submit" class="mdl-button volt-dialog-close"><i class="material-icons">chevron_right</i></button>
+          </form>
+          <span data-i18n="Share this proposition:" class="volt-dialog__action-share">Share this proposition:</span>
+          <form name="volt-share-facebook" class="volt-dialog-action-form">
+            <button type="submit" class="mdl-button volt-dialog-share-fb">
+              <i class="fab fa-facebook"></i>
+            </button>
+          </form>
+          <form name="volt-share-twitter" class="volt-dialog-action-form">
+            <button type="submit" class="mdl-button volt-dialog-share-tw">
+              <i class="fab fa-twitter"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </script>
+        
+  </head>
+  <body>
+
+    <div class="mdl-dialog volt-dialog">
+      <div class="mdl-dialog__content volt-dialog-content"></div>
+    </div>
+
+    <div class="volt-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="volt-header mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <a href="https://www.volteuropa.org" class="volt-home-button" title="https://www.volteuropa.org">
+            <img class="volt-home-icon" src="img/volt.min.png" alt="VoltEuropa" />
+          </a>
+          <h1 class="volt-site-header" data-i18n="Political Program">Political Programme</h1>
+          <div class="mdl-layout-spacer"></div>
+          <!--button class="volt-homescreen-flag mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">add_to_homescreen</i>
+          </button-->
+          <button class="volt-offline-flag mdl-button mdl-js-button mdl-button--icon" disabled="disabled">
+            <i class="material-icons">warning</i>
+          </button>
+          <!--form name="frube-open-menu-->
+          <button id="volt-open-menu" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">language</i>
+          </button>
+          <!--/form-->
+          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu" for="volt-open-menu">
+            <li class="mdl-menu__item mdl-menu__item--full-bleed-divider volt-custom-menu-action">
+              <i class="volt-lang volt-lang_en"></i>
+              <form name="volt-select-language" class="volt-select-language">
+                <input type="hidden" name="volt_language" value="en" />
+                <button type="submit" class="mdl-button mdl-js-button" data-i18n="english"></button>
+              </form>
+            </li>
+            <li class="mdl-menu__item mdl-menu__item--full-bleed-divider volt-custom-menu-action ">
+              <i class="volt-lang volt-lang_fr"></i>
+              <form name="volt-select-language" class="volt-select-language">
+                <input type="hidden" name="volt_language" value="fr" />
+                <button type="submit" class="mdl-button mdl-js-button" data-i18n="french"></button>
+              </form>
+            </li>
+            <li class="mdl-menu__item mdl-menu__item--full-bleed-divider volt-custom-menu-action">
+              <i class="volt-lang volt-lang_de"></i>
+              <form name="volt-select-language" class="volt-select-language">
+                <input type="hidden" name="volt_language" value="de" />
+                <button type="submit" class="mdl-button mdl-js-button" data-i18n="german"></button>
+              </form>
+            </li>
+            <li class="mdl-menu__item mdl-menu__item--full-bleed-divider volt-custom-menu-action">
+              <i class="volt-lang volt-lang_dk"></i>
+              <form name="volt-select-language" class="volt-select-language">
+                <input type="hidden" name="volt_language" value="dk" />
+                <button type="submit" class="mdl-button mdl-js-button" data-i18n="danish"></button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </header>
+      <main class="volt-page-content mdl-layout__content">
+        <div id="flakes">
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+          <i class="flake"></i><i class="flake"></i><i class="flake"></i><i class="flake"></i>
+        </div>
+        <label class="xmas-door_unset">
+          <input type="radio" name="xmas" class="xmas-door_clear xmas-input" value="0"/>
+        </label>
+        <section class="grid-1">
+          <div class="volt-introductory-text title">
+            <h2 class="volt-introductory-header" data-i18n="Christmas Calendar">Winter Calendar</h2>
+            <p class="volt-introductory-paragraph" data-i18n="Founded after the vote for Brexit">Founded after the Brexit vote, Volt is a pan-european, participative and progressive movement. We are active in 32 countries and have registered political parties in 13 with our goal of trying to be the voice for all those that believe in the necessity of a stronger, more democratic and transparent Europe.</p>
+            <p class="volt-introductory-paragraph" data-i18n="We want to present our program">We want to use this calendar to present our program for the upcoming European elections, called the Amsterdam Declaration. The Declaration was created by Volt volunteers from all over Europe and accepted on our national assembly in Amsterdam. We will introduce one of our propositions every day until the end of the year.</p>
+            <p class="volt-introductory-paragraph" data-i18n="Follow the calendar, discuss proposals">Follow the calendar, share and discuss proposals and concrete steps with us on social media or join us  to help adapt policies on national and local levels as well as to prepare for the European Elections</p>
+            <a class="volt-introductory-hash" data-i19n="https://www.volteuropa.org/" href="https://www.volteuropa.org/"><b class="volt-introductory-bold">#VoteVolt</b></a>
+            <a class="volt-introductory-donate" href="https://www.volteuropa.org/donate"><b class="volt-introductory-bold" data-i18n="Donate">Donate</b></a>
+          </div>
+          <div class="day-1 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="1" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">1</span><span class="volt-spoiler" data-i18n="Asylum Seekers and Refugees">Asylum Seekers and Refugees</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-2 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="2" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">2</span><span class="volt-spoiler" data-i18n="Governance">Governance</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-3 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="3" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">3</span><span class="volt-spoiler" data-i18n="Inclusion">Inclusion</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-4 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="4" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">4</span><span class="volt-spoiler" data-i18n="Security">Security</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-5 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="5" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">5</span><span class="volt-spoiler" data-i18n="Create Jobs">Create Jobs</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-6 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="6" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">6</span><span class="volt-spoiler" data-i18n="Education">Education</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-7 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="7" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">7</span><span class="volt-spoiler" data-i18n="No One Left Behind">No One Left Behind</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-8 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="8" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">8</span><span class="volt-spoiler" data-i18n="Equality Anti Discrimination">Equality &amp; Anti-Discrimination</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-9 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="9" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">9</span><span class="volt-spoiler" data-i18n="Deliberation">Deliberation</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-10 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="10" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">10</span><span class="volt-spoiler" data-i18n="Smart Energy">Minimize Climate Footprint</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-11 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="11" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">11</span><span class="volt-spoiler" data-i18n="Transparency">Transparency</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-12 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="12" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">12</span><span class="volt-spoiler" data-i18n="Circular economy">Circular Economy</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-13 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="13" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">13</span><span class="volt-spoiler" data-i18n="Participation">Participation</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-14 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="14" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">14</span><span class="volt-spoiler" data-i18n="Innovation">Innovation</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-15 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="15" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">15</span><span class="volt-spoiler" data-i18n="Sustainable agriculture">Sustainable Agriculture</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-16 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="16" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">16</span><span class="volt-spoiler" data-i18n="European Parliament">European Parliament</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-17 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="17" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">17</span><span class="volt-spoiler" data-i18n="Public Sector">Public Sector</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-18 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="18" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">18</span><span class="volt-spoiler" data-i18n="Corruption">Corruption</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-19 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="19" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">19</span><span class="volt-spoiler" data-i18n="Inclusion2">Inclusion</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-20 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="20" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">20</span><span class="volt-spoiler" data-i18n="Labour migration">Labour Migration</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-21 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="21" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">21</span><span class="volt-spoiler" data-i18n="Economy and finance">Economy and Finance</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-22 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="22" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">22</span><span class="volt-spoiler" data-i18n="The Volta Programme">The Volta Programme</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-23 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="23" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">23</span><span class="volt-spoiler" data-i18n="Entrepreneurship">Entrepeneurship</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-24 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="24" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">24</span><span class="volt-spoiler" data-i18n="Future of Work">Future of Work</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="volt-introductory-text prolong">
+            <p class="volt-introductory-paragraph" data-i18n="and since there are more propositions">... and since we have more propositions, we will continue until the end of the year.</p>
+          </div>
+          <div class="day-25 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="25" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">25</span><span class="volt-spoiler" data-i18n="Smart State">Smart State</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-26 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="26" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">26</span><span class="volt-spoiler" data-i18n="Economic Renaissance">Economic Renaissance</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-27 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="27" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">27</span><span class="volt-spoiler" data-i18n="Social Equality">Social Equality</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-28 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="28" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">28</span><span class="volt-spoiler" data-i18n="Global Balance">Global Balance</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-29 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="29" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">29</span><span class="volt-spoiler" data-i18n="Citizen Empowerment">Citizen Empowerment</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-30 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="30" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">30</span><span class="volt-spoiler" data-i18n="EU-Reforum">EU-Reform</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+          <div class="day-31 xmas-day">
+            <label class="xmas-door_frame">
+              <input type="radio" name="xmas" value="31" class="xmas-input" >
+                <div class="xmas-door">
+            			<h2 class="xmas-door_date"><span class="volt-count">31</span><span class="volt-spoiler" data-i18n="A Wish">A Wish</span></h2>
+            		</div>
+              </input>
+            </label>
+          </div>
+        </section>
+        <div class="volt-credits">Daily icon made by <a class="volt-credits-link" href="https://thenounproject.com/search/?q=new%20year&i=1994093">Gilberto</a> from <a class="volt-credits-link" href="https://nounproject.com/" title="Nounproject">the Nounproject</a>. Licensed under Creative Commons 3.0</div>
+      </main>
+    </div>
+
+    <div data-gadget-url="gadget_jio.html"
+      data-gadget-scope="volt_jio"
+      data-gadget-sandbox="public">
+    </div>
+  </body>
+</html>
+
+
